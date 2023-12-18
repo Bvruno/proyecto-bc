@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: api-usuarios
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/proyectoBC
+  devtools:
+    restart:
+      enabled: true
+  #cloud:
+    #discovery:
+      #enabled: true
+    #loadbalancer:
+      #ribbon:
+        #enabled: false
+
+server:
+  port: ${PORT:0}
+  servlet:
+    context-path: /api/usuarios
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+
+apis-net:
+  token: apis-token-6776.OLyGllM8ov0NcyjYCy4V84SKbxnL3Ix9
+  base: https://api.apis.net.pe/v2
+  url:
+    dni: ${apis-net.base}/reniec/dni #?numero=
+    ruc: ${apis-net.base}/sunat/ruc #?numero=
+    tipocambio: ${apis-net.base}/tipo-cambio-sunat
+
+twilio:
+  account_sid: ACc44ab6936281f296af497c0a360787dd
+  auth_token: 47b408a9e258a88c2b7a88611e478230
+  templates:
+    validar_cuenta: HX319225d7f8d5f8a5d8ad796edbfad867

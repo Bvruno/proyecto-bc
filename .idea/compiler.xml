@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="api-saldos" />
+        <module name="api-productos" />
+        <module name="api-pagos" />
+        <module name="api-usuarios" />
+        <module name="microservicio-eureka" />
+        <module name="api-notificaciones" />
+        <module name="api-getaway" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="api-getaway-zuul" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="api-getaway" options="-parameters" />
+      <module name="api-getaway-zuul" options="-parameters" />
+      <module name="api-notificaciones" options="-parameters" />
+      <module name="api-pagos" options="-parameters" />
+      <module name="api-productos" options="-parameters" />
+      <module name="api-saldos" options="-parameters" />
+      <module name="api-usuarios" options="-parameters" />
+      <module name="microservicio-eureka" options="-parameters" />
+    </option>
+  </component>
+</project>
