@@ -12,5 +12,5 @@ public class Codigo {
     @Id
     private Integer codigo;
     private long tiempoCreacion;
-    private String numeroTelefonico;
+    private String usuario;
 }
