@@ -5,15 +5,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
 
 import java.util.function.Predicate;
 
 @Data
 @Slf4j
-public class UsuarioValidarTelefonoDTO {
+public class ValidarTelefonoDTO {
 
-    public static Validacion convertToEntity(UsuarioValidarTelefonoDTO.Request request, Integer codigo) {
+    public static Validacion convertToEntity(ValidarTelefonoDTO.Request request, Integer codigo) {
         return Validacion.builder()
                 .tiempoCreacion(System.currentTimeMillis())
                 .codigo(codigo)

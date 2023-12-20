@@ -12,14 +12,14 @@ import java.util.function.Predicate;
 
 @Data
 @Slf4j
-public class UsuarioValidarDniDto {
+public class ValidarDniDto {
 
-    public static Response convertToResponse(Usuario usuario) {
+    public static Response isApellidoPaterno(Usuario usuario) {
         Predicate<String> isApellidoPaternoNull  = Objects::nonNull;
         return isApellidoPaternoNull.test(usuario.getApellidoPaterno()) ? new Response(true) : new Response(false);
     }
 
-    public static Response convertToResponse(DniResponse dniResponse, UsuarioValidarDniDto.Request request) {
+    public static Response isApellidoPaterno(DniResponse dniResponse, ValidarDniDto.Request request) {
         Predicate<String> isApellidoPaternoNull  = Objects::nonNull;
         BiPredicate<String, String> isMatchingApellidos  = (apellidoPaterno, apellidoMaterno) ->
                 apellidoPaterno.equalsIgnoreCase(request.getApellidoPaterno()) &&
@@ -29,7 +29,7 @@ public class UsuarioValidarDniDto {
                         new Response(true) : new Response(false);
     }
 
-    public static Boolean validarCredenciales(DniResponse dniResponse, UsuarioValidarDniDto.Request request) {
+    public static Boolean validarCredenciales(DniResponse dniResponse, ValidarDniDto.Request request) {
         Predicate<String> isApellidoPaternoNull  = Objects::nonNull;
         BiPredicate<String, String> isMatchingApellidos  = (apellidoPaterno, apellidoMaterno) ->
                 apellidoPaterno.equalsIgnoreCase(request.getApellidoPaterno()) &&
@@ -38,13 +38,17 @@ public class UsuarioValidarDniDto {
                 isMatchingApellidos.test(dniResponse.getApellidoPaterno(), dniResponse.getApellidoMaterno());
     }
 
-    public static Usuario convertToEntity(UsuarioValidarDniDto.Request request) {
+    public static Usuario convertToEntity(ValidarDniDto.Request request) {
         return Usuario.builder()
                 .dni(request.getDni())
                 .nombres(request.getNombres())
                 .apellidoPaterno(request.getApellidoPaterno())
                 .apellidoMaterno(request.getApellidoMaterno())
                 .build();
+    }
+
+    public static Response convertToResponse(Response val) {
+        return new Response(val.isCorrecto());
     }
 
 

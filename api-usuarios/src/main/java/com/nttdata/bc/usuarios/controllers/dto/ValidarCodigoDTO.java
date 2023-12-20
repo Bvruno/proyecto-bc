@@ -10,11 +10,11 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 @Data
-public class UsuarioValidarCodigoDTO {
+public class ValidarCodigoDTO {
 
-    public static boolean validarTiempoCreacionAndCodigoAndDni(Validacion validacion, UsuarioValidarCodigoDTO.Request request) {
+    public static boolean validarTiempoCreacionAndCodigoAndDni(Validacion validacion, ValidarCodigoDTO.Request request) {
         Predicate<Validacion> isTiempoCreacionValido = val -> val.getTiempoCreacion() + (2 * 60 * 1000) > System.currentTimeMillis();
-        BiPredicate<Validacion, UsuarioValidarCodigoDTO.Request > isCodigoAndDniValido = ( val , req) -> val.getCodigo().equals(req.getCodigo()) && val.getDni().equals(req.getDni());
+        BiPredicate<Validacion, ValidarCodigoDTO.Request > isCodigoAndDniValido = (val , req) -> val.getCodigo().equals(req.getCodigo()) && val.getDni().equals(req.getDni());
         return isTiempoCreacionValido.test(validacion) && isCodigoAndDniValido.test(validacion, request);
     }
 

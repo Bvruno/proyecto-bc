@@ -1,13 +1,8 @@
-package com.nttdata.bc.usuarios.config;
+package com.nttdata.bc.usuarios.configuration;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
-import javax.net.ssl.SSLContext;
 
 //@Configuration
 public class MongoConfiguration {

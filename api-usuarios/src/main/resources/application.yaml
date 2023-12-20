@@ -7,17 +7,29 @@ spring:
   devtools:
     restart:
       enabled: true
-  #cloud:
-    #discovery:
-      #enabled: true
-    #loadbalancer:
-      #ribbon:
-        #enabled: false
 
 server:
   port: ${PORT:0}
   servlet:
     context-path: /api/usuarios
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+    include-exception: false
+    include-path: never
+    include-servlet-path: never
+    include-parameters: never
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: ERROR
+    com.miapp.paquete: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+
 
 eureka:
   instance:
@@ -37,6 +49,6 @@ apis-net:
 
 twilio:
   account_sid: ACc44ab6936281f296af497c0a360787dd
-  auth_token: 47b408a9e258a88c2b7a88611e478230
+  auth_token: b71e2235c478a173950458104e159110
   templates:
     validar_cuenta: HX319225d7f8d5f8a5d8ad796edbfad867

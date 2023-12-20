@@ -5,6 +5,9 @@ spring:
     config:
       import-check:
         enabled: false
+    loadbalancer:
+      ribbon:
+        enabled: false
 
 server:
   port: 8761

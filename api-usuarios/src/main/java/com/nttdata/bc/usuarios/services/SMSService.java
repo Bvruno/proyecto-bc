@@ -6,6 +6,7 @@ import com.twilio.type.PhoneNumber;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 @Service
 @Slf4j
@@ -18,20 +19,16 @@ public class SMSService {
     @Value("${twilio.templates.validar_cuenta}")
     private String TEMPLATE_SID;
 
-    public Message enviarSMS(String numeroDestino, String mensaje) {
+    public Mono<Message> enviarSMS(String numeroDestino, String mensaje) {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-
-        String numeroTwilio = "+17028309298";
-        String mensajePersonalizado = String.format("{{1}}: %s", mensaje);
-
-        return Message
+        String numeroTwilio = "whatsapp:+14155238886";
+        return Mono.just(Message
                 .creator(
-                        new PhoneNumber(numeroDestino),
+                        new PhoneNumber("whatsapp:"+numeroDestino),
                         new PhoneNumber(numeroTwilio),
-                        TEMPLATE_SID
-                ).setBody(
-                        mensajePersonalizado
-                ).create();
+                        TEMPLATE_SID)
+                .setBody("Su código de validación es: *" + mensaje + "*")
+                .create());
 
     }
 }
