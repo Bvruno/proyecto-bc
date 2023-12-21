@@ -3,7 +3,6 @@ package com.nttdata.bc.productos.controllers.dto;
 import com.nttdata.bc.productos.models.Producto;
 import lombok.Builder;
 import lombok.Data;
-import org.reactivestreams.Publisher;
 
 @Data
 public class ProductoDto {
@@ -34,7 +33,7 @@ public class ProductoDto {
                 .nombre(val.getNombre())
                 .precio(val.getPrecio())
                 .descripcion(val.getDescripcion())
-                .idTienda(val.getIdTienda())
+                .idTienda(val.getIdLocalComercial())
                 .build();
     }
 
@@ -44,7 +43,7 @@ public class ProductoDto {
                 .nombre(request.getNombre())
                 .precio(request.getPrecio())
                 .descripcion(request.getDescripcion())
-                .idTienda(request.getIdTienda())
+                .idLocalComercial(request.getIdTienda())
                 .build();
     }
 

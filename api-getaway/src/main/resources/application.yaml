@@ -20,20 +20,15 @@ spring:
           predicates:
             - Path=/api/productos/**
 
-        - id: api-pagos
-          uri: lb://api-pagos
+        - id: api-compras
+          uri: lb://api-compras
           predicates:
-            - Path=/api/pagos/**
+            - Path=/api/compras/**
 
-        - id: api-saldos
-          uri: lb://api-saldos
+        - id: api-local-comercial
+          uri: lb://api-local-comercial
           predicates:
-            - Path=/api/saldos/**
-
-        - id: api-notificaciones
-          uri: lb://api-notificaciones
-          predicates:
-            - Path=/api/notificaciones/**
+            - Path=/api/localComercial/**
 
 
 eureka:

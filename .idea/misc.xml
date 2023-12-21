@@ -17,6 +17,8 @@
         <option value="$PROJECT_DIR$/microservicio-eureka/pom.xml" />
         <option value="$PROJECT_DIR$/api-getaway-zuul/pom.xml" />
         <option value="$PROJECT_DIR$/api-getaway/pom.xml" />
+        <option value="$PROJECT_DIR$/api-local-comercial/pom.xml" />
+        <option value="$PROJECT_DIR$/api-compras/pom.xml" />
       </list>
     </option>
   </component>

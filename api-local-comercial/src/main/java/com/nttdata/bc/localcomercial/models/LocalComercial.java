@@ -1,4 +1,4 @@
-package com.nttdata.bc.productos.models;
+package com.nttdata.bc.localcomercial.models;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,14 +10,15 @@ import lombok.Data;
 
 @Data
 @Builder
-@Document(collection = "productos")
-public class Producto {
+@Document(collection = "localesComerciales")
+public class LocalComercial {
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
     private String id;
     private String nombre;
-    private double precio;
     private String descripcion;
-    private String idLocalComercial;
-    private int unidades;
+    private String direccion;
+    private String horario;
+
+    private String idUsuario;
 }
