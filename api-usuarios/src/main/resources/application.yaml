@@ -17,10 +17,6 @@ server:
     include-binding-errors: always
     include-stacktrace: never
     include-exception: false
-    include-path: never
-    include-servlet-path: never
-    include-parameters: never
-
 
 logging:
   level:
@@ -29,7 +25,6 @@ logging:
     com.miapp.paquete: DEBUG
   pattern:
     console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
-
 
 eureka:
   instance:

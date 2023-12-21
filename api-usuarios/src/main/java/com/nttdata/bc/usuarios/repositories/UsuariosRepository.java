@@ -1,4 +1,4 @@
-package com.nttdata.bc.usuarios.repository;
+package com.nttdata.bc.usuarios.repositories;
 
 import com.nttdata.bc.usuarios.models.Usuario;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;

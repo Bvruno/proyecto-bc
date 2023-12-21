@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ApiProductosApplication",
+            "request": "launch",
+            "mainClass": "com.nttdata.bc.productos.ApiProductosApplication",
+            "projectName": "api-productos"
+        },
+        {
+            "type": "java",
+            "name": "ApiGetawayApplication",
+            "request": "launch",
+            "mainClass": "com.nttdata.bc.getaway.ApiGetawayApplication",
+            "projectName": "api-getaway"
+        },
+        {
+            "type": "java",
+            "name": "MicroservicioEurekaApplication",
+            "request": "launch",
+            "mainClass": "com.nttdata.bc.eureka.MicroservicioEurekaApplication",
+            "projectName": "microservicio-eureka"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ApiUsuariosApplication<api-usuarios>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.nttdata.bc.usuarios.ApiUsuariosApplication",
+            "projectName": "api-usuarios",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

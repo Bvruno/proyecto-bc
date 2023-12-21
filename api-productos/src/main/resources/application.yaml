@@ -3,16 +3,32 @@ spring:
     name: api-productos
   data:
     mongodb:
-      uri: mongodb://localhost:27017
+      uri: mongodb://localhost:27017/proyectoBC
+  devtools:
+    restart:
+      enabled: true
 
 server:
   port: ${PORT:0}
   servlet:
     context-path: /api/productos
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+    include-exception: false
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: ERROR
+    com.miapp.paquete: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
 
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${random.value}
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
