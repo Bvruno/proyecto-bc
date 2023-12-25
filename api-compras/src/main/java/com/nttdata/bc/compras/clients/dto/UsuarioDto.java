@@ -1,14 +1,14 @@
-package com.nttdata.bc.usuarios.controllers.dto;
+package com.nttdata.bc.compras.clients.dto;
 
-import com.nttdata.bc.usuarios.models.Usuario;
+import com.nttdata.bc.compras.models.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.mongodb.core.index.Indexed;
 
 @Data
 @Builder
-public class UsuarioEditarDto {
+public class UsuarioDto {
+
     private String id;
     private String dni;
     private String nombreCompleto;
@@ -21,11 +21,30 @@ public class UsuarioEditarDto {
     private String direccion;
     private String telefono;
     private boolean telefonoValidado;
-    private String rol;
     private double saldo;
+    private String rol;
     private boolean activo;
 
-    public static Usuario convertToUsuarioSave(Request request, Usuario usuario) {
+    public static UsuarioDto convertToDto(Usuario usuario) {
+        return UsuarioDto.builder()
+                .id(usuario.getId())
+                .dni(usuario.getDni())
+                .nombreCompleto(usuario.getNombreCompleto())
+                .nombres(usuario.getNombres())
+                .apellidoPaterno(usuario.getApellidoPaterno())
+                .apellidoMaterno(usuario.getApellidoMaterno())
+                .email(usuario.getEmail())
+                .emailValidado(usuario.isEmailValidado())
+                .password(usuario.getPassword())
+                .direccion(usuario.getDireccion())
+                .telefono(usuario.getTelefono())
+                .telefonoValidado(usuario.isTelefonoValidado())
+                .rol(usuario.getRol())
+                .activo(usuario.isActivo())
+                .build();
+    }
+
+    public static Usuario convertToUsuarioSave(UsuarioDto.Request request, Usuario usuario) {
         return Usuario.builder()
                 .id(usuario.getId())
                 .dni(usuario.getDni())
@@ -40,28 +59,21 @@ public class UsuarioEditarDto {
                 .telefono(request.getTelefono())
                 .telefonoValidado(usuario.isTelefonoValidado())
                 .rol(request.getRol())
-                .saldo(usuario.getSaldo())
                 .activo(request.isActivo())
                 .build();
     }
 
-    public static UsuarioEditarDto convertToDto(Usuario usuario) {
-        return UsuarioEditarDto.builder()
+    public static UsuarioDto.Request convertToRequest(UsuarioDto usuario) {
+        return Request.builder()
                 .id(usuario.getId())
                 .dni(usuario.getDni())
-                .nombreCompleto(usuario.getNombreCompleto())
-                .nombres(usuario.getNombres())
-                .apellidoPaterno(usuario.getApellidoPaterno())
-                .apellidoMaterno(usuario.getApellidoMaterno())
-                .email(usuario.getEmail())
-                .emailValidado(usuario.isEmailValidado())
                 .password(usuario.getPassword())
                 .direccion(usuario.getDireccion())
                 .telefono(usuario.getTelefono())
-                .telefonoValidado(usuario.isTelefonoValidado())
-                .rol(usuario.getRol())
+                .email(usuario.getEmail())
                 .saldo(usuario.getSaldo())
-                .activo(usuario.isActivo())
+                .rol(usuario.getRol())
+                .isActivo(usuario.isActivo())
                 .build();
     }
 
@@ -76,8 +88,9 @@ public class UsuarioEditarDto {
     }
 
     @Data
-    @AllArgsConstructor
+    @Builder
     public static class Request {
+        private String id;
         private String dni; //TODO: no se puede editar
 
         private String password; //TODO: para editar el password, se debe validar el password actual
@@ -89,10 +102,9 @@ public class UsuarioEditarDto {
         private String email; //TODO: para editar el email, se debe tener un telefono validado
         private String codigoValidacionEmail;
 
+        private double saldo;
+
         private String rol; //TODO: solo el admin puede editar el rol
-
-        private int saldo;
-
         private boolean isActivo; //TODO: para editar el estado, se debe tener un correo validado y/o un telefono validado
     }
 }

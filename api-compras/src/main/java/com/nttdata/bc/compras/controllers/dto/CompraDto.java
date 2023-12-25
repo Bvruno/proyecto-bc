@@ -29,9 +29,8 @@ public class CompraDto {
     public static Responce convertToResponce(Compra compra) {
         List<CompraDto.ProductoDto> listaProductos = compra.getListaProductos().stream()
                 .map(producto -> CompraDto.ProductoDto.builder()
-                        .nombre(producto.getNombre())
+                        .nombre(producto.getId())
                         .precio(producto.getPrecio())
-                        .idLocalComercial(producto.getIdLocalComercial())
                         .unidades(producto.getUnidades())
                         .build())
                 .collect(Collectors.toList());
@@ -46,9 +45,8 @@ public class CompraDto {
     public static Compra convertToEntity(Request request) {
         List<Compra.Producto> listaProductos = request.getListaProductos().stream()
                 .map(producto -> Compra.Producto.builder()
-                        .nombre(producto.getNombre())
+                        .id(producto.getNombre())
                         .precio(producto.getPrecio())
-                        .idLocalComercial(producto.getIdLocalComercial())
                         .unidades(producto.getUnidades())
                         .build())
                 .collect(Collectors.toList());
@@ -67,7 +65,7 @@ public class CompraDto {
         private String id;
         private String idUsuario;
         private List<CompraDto.ProductoDto> listaProductos;
-        private int montoTotal;
+        private double montoTotal;
     }
 
     @Data
@@ -75,12 +73,13 @@ public class CompraDto {
     public static class Responce {
         private String idUsuario;
         private List<CompraDto.ProductoDto> listaProductos;
-        private int montoTotal;
+        private double montoTotal;
     }
 
     @Data
     @Builder
     public static class ProductoDto {
+        private String id;
         private String nombre;
         private double precio;
         private String idLocalComercial;

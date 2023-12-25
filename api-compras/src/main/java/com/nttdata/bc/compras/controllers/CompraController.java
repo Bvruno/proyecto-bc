@@ -31,10 +31,7 @@ public class CompraController {
     }
 
     @PutMapping("/editar/{id}")
-    public Mono<CompraDto.Responce> updateCompra(
-            @PathVariable String id,
-            @RequestBody CompraDto.Request compra
-    ) {
+    public Mono<CompraDto.Responce> updateCompra(@PathVariable String id, @RequestBody CompraDto.Request compra) {
         return compraServices.updateCompra(id, compra);
     }
 

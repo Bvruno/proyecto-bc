@@ -1,53 +1,52 @@
-package com.nttdata.bc.productos.controllers.dto;
+package com.nttdata.bc.compras.clients.dto;
 
-import com.nttdata.bc.productos.models.Producto;
+import com.nttdata.bc.compras.models.Producto;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 public class ProductoDto {
 
-    public static ProductoDto.Responce convertToReturn(ProductoDto.Request request) {
-        return ProductoDto.Responce.builder()
+    public static Responce convertToReturn(Request request) {
+        return Responce.builder()
                 .id(request.getId())
                 .nombre(request.getNombre())
                 .precio(request.getPrecio())
                 .descripcion(request.getDescripcion())
-                .unidades(request.getUnidades())
-                .idTienda(request.getIdTienda())
+                .idLocalComercial(request.getIdLocalComercial())
                 .build();
     }
 
-    public static ProductoDto.Request convertToRequest(ProductoDto.Responce val) {
-        return ProductoDto.Request.builder()
+    public static Request convertToRequest(Responce val) {
+        return Request.builder()
                 .id(val.getId())
                 .nombre(val.getNombre())
                 .precio(val.getPrecio())
                 .descripcion(val.getDescripcion())
+                .idLocalComercial(val.getIdLocalComercial())
                 .unidades(val.getUnidades())
-                .idTienda(val.getIdTienda())
                 .build();
     }
 
-    public static ProductoDto.Responce convertToResponce(Producto val) {
-        return ProductoDto.Responce.builder()
+    public static Responce convertToResponce(Producto val) {
+        return Responce.builder()
                 .id(val.getId())
                 .nombre(val.getNombre())
                 .precio(val.getPrecio())
                 .descripcion(val.getDescripcion())
+                .idLocalComercial(val.getIdLocalComercial())
                 .unidades(val.getUnidades())
-                .idTienda(val.getIdLocalComercial())
                 .build();
     }
 
-    public static Producto convertToEntity(ProductoDto.Request request) {
+    public static Producto convertToEntity(Request request) {
         return Producto.builder()
                 .id(request.getId())
                 .nombre(request.getNombre())
                 .precio(request.getPrecio())
                 .descripcion(request.getDescripcion())
+                .idLocalComercial(request.getIdLocalComercial())
                 .unidades(request.getUnidades())
-                .idLocalComercial(request.getIdTienda())
                 .build();
     }
 
@@ -58,8 +57,8 @@ public class ProductoDto {
         private String nombre;
         private double precio;
         private String descripcion;
+        private String idLocalComercial;
         private int unidades;
-        private String idTienda;
     }
 
     @Data
@@ -69,8 +68,8 @@ public class ProductoDto {
         private String nombre;
         private double precio;
         private String descripcion;
+        private String idLocalComercial;
         private int unidades;
-        private String idTienda;
 
     }
 }

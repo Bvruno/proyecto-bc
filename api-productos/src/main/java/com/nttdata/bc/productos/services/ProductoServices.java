@@ -40,6 +40,7 @@ public class ProductoServices {
                 .flatMap(existingProducto -> {
                     existingProducto.setNombre(producto.getNombre());
                     existingProducto.setPrecio(producto.getPrecio());
+                    existingProducto.setUnidades(producto.getUnidades());
                     return productoRepository.save(existingProducto)
                             .switchIfEmpty(Mono.error(new Exception("No se pudo actualizar el producto")))
                             .map(ProductoDto::convertToResponce);
@@ -50,4 +51,8 @@ public class ProductoServices {
         return productoRepository.deleteById(id);
     }
 
+    public Flux<ProductoDto.Responce> getAllProductoByIdLocalComercial(String id) {
+        return productoRepository.findByIdLocalComercial(id).
+                map(ProductoDto::convertToResponce);
+    }
 }

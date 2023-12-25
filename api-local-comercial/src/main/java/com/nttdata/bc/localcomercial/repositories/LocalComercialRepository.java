@@ -7,5 +7,5 @@ import reactor.core.publisher.Mono;
 
 public interface LocalComercialRepository extends ReactiveMongoRepository<LocalComercial, String> {
     Mono<LocalComercial> findByNombre(String nombre);
-    Mono<LocalComercial> findByIdTienda(String idTienda);
+    Mono<LocalComercial> findByIdUsuario(String idTienda);
 } 

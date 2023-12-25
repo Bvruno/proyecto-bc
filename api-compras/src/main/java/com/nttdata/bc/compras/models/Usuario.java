@@ -1,6 +1,5 @@
-package com.nttdata.bc.usuarios.models;
+package com.nttdata.bc.compras.models;
 
-import ch.qos.logback.classic.spi.LoggingEventVO;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Builder;
@@ -31,7 +30,6 @@ public class Usuario {
     private String telefono;
     private boolean telefonoValidado;
     private String rol;
-    private double saldo;
     private boolean activo;
 
 }

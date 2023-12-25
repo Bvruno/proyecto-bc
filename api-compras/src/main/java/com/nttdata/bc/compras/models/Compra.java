@@ -19,14 +19,13 @@ public class Compra {
     private String id;
     private String idUsuario;
     private List<Producto> listaProductos;
-    private int montoTotal;
+    private double montoTotal;
 
     @Data
     @Builder
     public static class Producto {
-        private String nombre;
+        private String id;
         private double precio;
-        private String idLocalComercial;
         private int unidades;
     }
 }

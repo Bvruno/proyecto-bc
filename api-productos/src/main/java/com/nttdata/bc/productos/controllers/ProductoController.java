@@ -11,9 +11,10 @@ public class ProductoController {
 
     private final ProductoServices productoServices;
 
-    ProductoController(ProductoServices productoServices) {
+    public ProductoController(ProductoServices productoServices) {
         this.productoServices = productoServices;
     }
+
 
     @GetMapping()
     public Flux<ProductoDto.Responce> getProductos() {
@@ -23,6 +24,11 @@ public class ProductoController {
     @GetMapping("/{id}")
     public Mono<ProductoDto.Responce> getProductoById(@PathVariable String id) {
         return productoServices.getProductoById(id);
+    }
+
+    @GetMapping("/localComercial/{id}")
+    public Flux<ProductoDto.Responce> getAllProductoByIdLocalComercial(@PathVariable String id) {
+        return productoServices.getAllProductoByIdLocalComercial(id);
     }
 
     @PostMapping("/crear")
