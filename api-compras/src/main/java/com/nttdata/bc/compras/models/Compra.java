@@ -20,6 +20,7 @@ public class Compra {
     private String idUsuario;
     private List<Producto> listaProductos;
     private double montoTotal;
+    private long fechaCompra;
 
     @Data
     @Builder

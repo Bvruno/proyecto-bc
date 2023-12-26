@@ -117,8 +117,8 @@ public class UsuarioServices {
                 .switchIfEmpty(Mono.error(new BadRequestException("Error al encontrar el usuario")))
                 .flatMap(usuario ->
                         usuariosRepository.save(UsuarioEditarDto.convertToUsuarioSave(request, usuario))
-                                .flatMap(usuarioValidado -> Mono.just(UsuarioEditarDto.convertToDto(usuarioValidado))))
-                .switchIfEmpty(Mono.error(new BadRequestException("Error al guardar el usuario")));
+                                .switchIfEmpty(Mono.error(new BadRequestException("Error al guardar el usuario")))
+                                .flatMap(usuarioValidado -> Mono.just(UsuarioEditarDto.convertToDto(usuarioValidado))));
     }
 
     public void deleteByDni(String ruc) {

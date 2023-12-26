@@ -56,6 +56,7 @@ public class CompraDto {
                 .idUsuario(request.getIdUsuario())
                 .listaProductos(listaProductos)
                 .montoTotal(request.getMontoTotal())
+                .fechaCompra(System.currentTimeMillis())
                 .build();
     }
 

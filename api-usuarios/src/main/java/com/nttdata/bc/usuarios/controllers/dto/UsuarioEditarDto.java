@@ -35,12 +35,12 @@ public class UsuarioEditarDto {
                 .apellidoMaterno(usuario.getApellidoMaterno())
                 .email(usuario.getEmail())
                 .emailValidado(usuario.isEmailValidado())
-                .password(usuario.getPassword())
+                .password(request.getPassword())
                 .direccion(request.getDireccion())
                 .telefono(request.getTelefono())
                 .telefonoValidado(usuario.isTelefonoValidado())
                 .rol(request.getRol())
-                .saldo(usuario.getSaldo())
+                .saldo(request.getSaldo())
                 .activo(request.isActivo())
                 .build();
     }
@@ -91,7 +91,7 @@ public class UsuarioEditarDto {
 
         private String rol; //TODO: solo el admin puede editar el rol
 
-        private int saldo;
+        private double saldo;
 
         private boolean isActivo; //TODO: para editar el estado, se debe tener un correo validado y/o un telefono validado
     }
