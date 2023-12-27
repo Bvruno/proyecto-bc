@@ -33,3 +33,20 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  openapi:
+    groups:
+      - group1:
+          paths-to-match: /api/compras/**
+          packages-to-scan: com.miapp.paquete.compras
+          title: Compras
+          description: Servicios para la gestión de compras
+          version: 1.0.0
+          contact:
+            name: MiApp
+            email:

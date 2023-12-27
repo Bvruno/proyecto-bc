@@ -39,3 +39,11 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+logging:
+    level:
+        root: INFO
+        org.springframework.cloud.gateway: DEBUG
+        org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: info
+    pattern:
+        console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"

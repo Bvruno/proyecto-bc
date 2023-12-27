@@ -1,0 +1,39 @@
+version: '3'
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+    networks:
+      - my-network
+
+  eureka-server:
+    image: microservicio-eureka-server:latest
+    container_name: eureka-server
+    ports:
+      - "8761:8761"
+
+  api-gateway:
+    image: your-api-service-1-image:tag
+    ports:
+      - "8090:8090"
+    networks:
+      - my-network
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka
+
+  api-service-2:
+    image: your-api-service-2-image:tag
+    ports:
+      - "8082:8080" # El puerto del contenedor puede variar, asegúrate de ajustarlo según tu configuración
+    networks:
+      - my-network
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka
+
+networks:
+  my-network:
+    driver: bridge

@@ -16,25 +16,25 @@ public class LocalComercialServices {
         this.localComercialRepository = localComercialRepository;
     }
 
-    public Flux<LocalComercialDto.Responce> getAllLocalComercial() {
+    public Flux<LocalComercialDto.Response> getAllLocalComercial() {
         return localComercialRepository.findAll()
                 .switchIfEmpty(Flux.empty())
-                .map(LocalComercialDto::convertToResponce);
+                .map(LocalComercialDto::convertToResponse);
     }
 
-    public Mono<LocalComercialDto.Responce> getLocalComercialById(String id) {
+    public Mono<LocalComercialDto.Response> getLocalComercialById(String id) {
         return localComercialRepository.findById(id)
                 .switchIfEmpty(Mono.error(new Exception("No se encontro el local comercial")))
-                .map(LocalComercialDto::convertToResponce);
+                .map(LocalComercialDto::convertToResponse);
     }
 
-    public Mono<LocalComercialDto.Responce> createLocalComercial(LocalComercialDto.Request localComercial) {
+    public Mono<LocalComercialDto.Response> createLocalComercial(LocalComercialDto.Request localComercial) {
         return localComercialRepository.save(LocalComercialDto.convertToEntity(localComercial))
                 .switchIfEmpty(Mono.error(new Exception("No se pudo crear el local comercial")))
-                .map(LocalComercialDto::convertToResponce);
+                .map(LocalComercialDto::convertToResponse);
     }
 
-    public Mono<LocalComercialDto.Responce> updateLocalComercial(String id, LocalComercialDto.Request request) {
+    public Mono<LocalComercialDto.Response> updateLocalComercial(String id, LocalComercialDto.Request request) {
         return localComercialRepository.findById(id)
                 .switchIfEmpty(Mono.error(new Exception("No se encontro el local comercial")))
                 .flatMap(localComercial -> {
@@ -42,7 +42,7 @@ public class LocalComercialServices {
                     localComercial.setDescripcion(request.getDescripcion());
                     return localComercialRepository.save(localComercial)
                             .switchIfEmpty(Mono.error(new Exception("No se pudo actualizar el local comercial")))
-                            .map(LocalComercialDto::convertToResponce);
+                            .map(LocalComercialDto::convertToResponse);
                 });
     }
 

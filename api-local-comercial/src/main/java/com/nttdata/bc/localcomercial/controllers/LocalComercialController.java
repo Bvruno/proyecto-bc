@@ -16,22 +16,22 @@ public class LocalComercialController {
     }
 
     @GetMapping()
-    public Flux<LocalComercialDto.Responce> getLocalComercial() {
+    public Flux<LocalComercialDto.Response> getLocalComercial() {
         return localComercialServices.getAllLocalComercial();
     }
 
     @GetMapping("/{id}")
-    public Mono<LocalComercialDto.Responce> getLocalComercialById(@PathVariable String id) {
+    public Mono<LocalComercialDto.Response> getLocalComercialById(@PathVariable String id) {
         return localComercialServices.getLocalComercialById(id);
     }
 
     @PostMapping("/crear")
-    public Mono<LocalComercialDto.Responce> createLocalComercial(@RequestBody LocalComercialDto.Request localComercia) {
+    public Mono<LocalComercialDto.Response> createLocalComercial(@RequestBody LocalComercialDto.Request localComercia) {
         return localComercialServices.createLocalComercial(localComercia);
     }
 
     @PutMapping("/editar/{id}")
-    public Mono<LocalComercialDto.Responce> updateLocalComercial(
+    public Mono<LocalComercialDto.Response> updateLocalComercial(
             @PathVariable String id,
             @RequestBody LocalComercialDto.Request localComercia
     ) {
