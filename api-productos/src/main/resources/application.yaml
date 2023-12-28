@@ -3,7 +3,7 @@ spring:
     name: api-productos
   data:
     mongodb:
-      uri: mongodb://localhost:27017/proyectoBC
+      uri: ${MONGO_URI}
   devtools:
     restart:
       enabled: true
