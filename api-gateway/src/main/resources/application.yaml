@@ -1,0 +1,52 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: api-usuarios
+          uri: lb://api-usuarios
+          predicates:
+            - Path=/api/usuarios/**
+
+        - id: api-productos
+          uri: lb://api-productos
+          predicates:
+            - Path=/api/productos/**
+
+        - id: api-compras
+          uri: lb://api-compras
+          predicates:
+            - Path=/api/compras/**
+
+        - id: api-local-comercial
+          uri: lb://api-local-comercial
+          predicates:
+            - Path=/api/localComercial/**
+
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER}
+
+logging:
+    level:
+        root: INFO
+        org.springframework.cloud.gateway: DEBUG
+        org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: info
+    pattern:
+        console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"

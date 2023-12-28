@@ -1,8 +1,7 @@
 package com.nttdata.bc.compras.services;
 
-import com.nttdata.bc.compras.clients.LocalComercialApiClient;
 import com.nttdata.bc.compras.clients.ProductoApiClient;
-import com.nttdata.bc.compras.clients.UserApiClient;
+import com.nttdata.bc.compras.clients.UsuarioApiClient;
 import com.nttdata.bc.compras.clients.dto.ProductoDto;
 import com.nttdata.bc.compras.clients.dto.UsuarioDto;
 import com.nttdata.bc.compras.controllers.dto.CompraDto;
@@ -15,7 +14,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -23,14 +21,12 @@ public class CompraServices {
 
     private final CompraRepository compraRepository;
     private final ProductoApiClient productoApiClient;
-    private final UserApiClient userApiClient;
-    private final LocalComercialApiClient localComercialApiClient;
+    private final UsuarioApiClient usuarioApiClient;
 
-    CompraServices(CompraRepository compraRepository, ProductoApiClient productoApiClient, UserApiClient userApiClient, LocalComercialApiClient localComercialApiClient) {
+    CompraServices(CompraRepository compraRepository, ProductoApiClient productoApiClient, UsuarioApiClient usuarioApiClient) {
         this.compraRepository = compraRepository;
         this.productoApiClient = productoApiClient;
-        this.userApiClient = userApiClient;
-        this.localComercialApiClient = localComercialApiClient;
+        this.usuarioApiClient = usuarioApiClient;
     }
 
     public Flux<CompraDto.Responce> getAllCompra() {
@@ -45,7 +41,7 @@ public class CompraServices {
         double montoTotal = calcularMontoTotal(request);
         request.setMontoTotal(montoTotal);
 
-        return userApiClient.getUserById(request.getIdUsuario())
+        return usuarioApiClient.getUsuarioById(request.getIdUsuario())
                 .switchIfEmpty(Mono.error(new UsuarioException("No se pudo encontrar al usuario: " + request.getIdUsuario())))
                 .flatMap(usuario ->
                         validarSaldo(usuario, request) ?
@@ -59,7 +55,7 @@ public class CompraServices {
                                         productoApiClient.updateProducto(producto.getId(), ProductoDto.convertToRequest(producto)).subscribe();
                                     });
                                     usuario.setSaldo(usuario.getSaldo() - montoTotal);
-                                    return userApiClient.updateUser(UsuarioDto.convertToRequest(usuario))
+                                    return usuarioApiClient.updateUsuario(UsuarioDto.convertToRequest(usuario))
                                             .switchIfEmpty(Mono.error(new UsuarioException("No se pudo actualizar el usuario")))
                                             .then(compraRepository.save(CompraDto.convertToEntity(request))
                                                     .switchIfEmpty(Mono.error(new CompraException("No se pudo crear la compra")))
@@ -81,7 +77,7 @@ public class CompraServices {
         return montoTotal;
     }
 
-    private Mono<List<ProductoDto.Responce>> validarStockSuficiente(CompraDto.Request request) {
+    private Mono<List<ProductoDto.Response>> validarStockSuficiente(CompraDto.Request request) {
         return Flux.fromIterable(request.getListaProductos())
                 .flatMap(producto -> productoApiClient.getProductoById(producto.getId())
                         .switchIfEmpty(Mono.error(new ProductoNoEncontradoException(producto.getId())))

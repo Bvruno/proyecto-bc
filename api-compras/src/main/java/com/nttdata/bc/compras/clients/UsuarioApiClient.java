@@ -1,6 +1,6 @@
 package com.nttdata.bc.compras.clients;
 
-import com.nttdata.bc.compras.clients.dto.ProductoDto;
+import com.nttdata.bc.compras.clients.dto.UsuarioDto;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.http.HttpHeaders;
@@ -10,41 +10,41 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-public class ProductoApiClient {
+public class UsuarioApiClient {
 
     private final WebClient.Builder webClientBuilder;
     private final DiscoveryClient discoveryClient;
 
-    public ProductoApiClient(WebClient.Builder webClientBuilder, DiscoveryClient discoveryClient) {
+    public UsuarioApiClient(WebClient.Builder webClientBuilder, DiscoveryClient discoveryClient) {
         this.discoveryClient = discoveryClient;
         this.webClientBuilder = webClientBuilder;
     }
 
     private String url() {
-        ServiceInstance serviceInstance = discoveryClient.getInstances("api-productos")
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
+        ServiceInstance serviceInstance = discoveryClient.getInstances("api-usuarios")
+                .stream().findFirst().orElseThrow(() -> new RuntimeException("Servicio no encontrado"));
         return serviceInstance.getUri().toString();
     }
 
-    public Mono<ProductoDto.Response> getProductoById(String id) {
+    public Mono<UsuarioDto> getUsuarioById(String id) {
         return webClientBuilder.baseUrl(url())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build().get()
-                .uri("/api/productos/{id}", id)
+                .build()
+                .get()
+                .uri("/api/usuarios/{id}", id)
                 .retrieve()
-                .bodyToMono(ProductoDto.Response.class);
+                .bodyToMono(UsuarioDto.class);
     }
 
-    public Mono<ProductoDto.Response> updateProducto(String id, ProductoDto.Request producto) {
+    public Mono<UsuarioDto> updateUsuario(UsuarioDto.Request usuario) {
         return webClientBuilder.baseUrl(url())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build().put()
-                .uri("/api/productos/editar/{id}", id)
-                .body(Mono.just(producto), ProductoDto.Request.class)
+                .build()
+                .put()
+                .uri("/api/usuarios/editar")
+                .body(Mono.just(usuario), UsuarioDto.class)
                 .retrieve()
-                .bodyToMono(ProductoDto.Response.class);
+                .bodyToMono(UsuarioDto.class);
     }
 
 }

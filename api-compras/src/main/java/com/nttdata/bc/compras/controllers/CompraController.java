@@ -2,6 +2,7 @@ package com.nttdata.bc.compras.controllers;
 
 import com.nttdata.bc.compras.controllers.dto.CompraDto;
 import com.nttdata.bc.compras.services.CompraServices;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,23 +17,23 @@ public class CompraController {
     }
 
     @GetMapping()
-    public Flux<CompraDto.Responce> getCompra() {
-        return compraServices.getAllCompra();
+    public Flux<ResponseEntity<CompraDto.Responce>> getCompra() {
+        return compraServices.getAllCompra().map(ResponseEntity::ok);
     }
 
     @GetMapping("/{id}")
-    public Mono<CompraDto.Responce> getCompraById(@PathVariable String id) {
-        return compraServices.getCompraById(id);
+    public Mono<ResponseEntity<CompraDto.Responce>> getCompraById(@PathVariable String id) {
+        return compraServices.getCompraById(id).map(ResponseEntity::ok);
     }
 
     @PostMapping("/crear")
-    public Mono<CompraDto.Responce> createCompra(@RequestBody CompraDto.Request compra) {
-        return compraServices.createCompra(compra);
+    public Mono<ResponseEntity<CompraDto.Responce>> createCompra(@RequestBody CompraDto.Request compra) {
+        return compraServices.createCompra(compra).map(ResponseEntity::ok);
     }
 
     @PutMapping("/editar/{id}")
-    public Mono<CompraDto.Responce> updateCompra(@PathVariable String id, @RequestBody CompraDto.Request compra) {
-        return compraServices.updateCompra(id, compra);
+    public Mono<ResponseEntity<CompraDto.Responce>> updateCompra(@PathVariable String id, @RequestBody CompraDto.Request compra) {
+        return compraServices.updateCompra(id, compra).map(ResponseEntity::ok);
     }
 
     @DeleteMapping("/eliminar/{id}")

@@ -18,10 +18,12 @@ public class SMSService {
     private String AUTH_TOKEN;
     @Value("${twilio.templates.validar_cuenta}")
     private String TEMPLATE_SID;
+    @Value("${twilio.phone_number}")
+    private String PHONE_NUMBER;
 
     public Mono<Message> enviarSMS(String numeroDestino, String mensaje) {
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        String numeroTwilio = "whatsapp:+14155238886";
+        String numeroTwilio = "whatsapp:"+PHONE_NUMBER;
         return Mono.just(Message
                 .creator(
                         new PhoneNumber("whatsapp:"+numeroDestino),

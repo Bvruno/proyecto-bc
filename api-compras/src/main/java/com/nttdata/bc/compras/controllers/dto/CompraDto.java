@@ -10,22 +10,6 @@ import java.util.stream.Collectors;
 @Data
 public class CompraDto {
 
-    public static Responce convertToReturn(Request request) {
-        return Responce.builder()
-                .idUsuario(request.getIdUsuario())
-                .listaProductos(request.getListaProductos())
-                .montoTotal(request.getMontoTotal())
-                .build();
-    }
-
-    public static Request convertToRequest(Responce responce) {
-        return Request.builder()
-                .idUsuario(responce.getIdUsuario())
-                .listaProductos(responce.getListaProductos())
-                .montoTotal(responce.getMontoTotal())
-                .build();
-    }
-
     public static Responce convertToResponce(Compra compra) {
         List<CompraDto.ProductoDto> listaProductos = compra.getListaProductos().stream()
                 .map(producto -> CompraDto.ProductoDto.builder()

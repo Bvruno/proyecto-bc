@@ -7,15 +7,16 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="api-gateway" />
         <module name="api-local-comercial" />
+        <module name="microservicio-eureka" />
         <module name="api-productos" />
         <module name="api-compras" />
         <module name="api-usuarios" />
-        <module name="microservicio-eureka" />
-        <module name="api-getaway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="api-getaway" target="17" />
       <module name="api-getaway-zuul" target="17" />
       <module name="api-notificaciones" target="17" />
       <module name="api-pagos" target="17" />
@@ -25,6 +26,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="api-compras" options="-parameters" />
+      <module name="api-gateway" options="-parameters" />
       <module name="api-getaway" options="-parameters" />
       <module name="api-getaway-zuul" options="-parameters" />
       <module name="api-local-comercial" options="-parameters" />

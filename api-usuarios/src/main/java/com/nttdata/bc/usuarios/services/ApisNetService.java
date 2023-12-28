@@ -18,7 +18,7 @@ import java.net.URI;
 public class ApisNetService {
 
     private final WebClient webClient;
-    @Value("${apis-net.url.dni}")
+    @Value("${apis-net.url}")
     private String urlDNI;
     @Value("${apis-net.token}")
     private String token;

@@ -9,7 +9,7 @@ spring:
       enabled: true
 
 server:
-  port: ${PORT:0}
+  port: ${PORT:8083}
   servlet:
     context-path: /api/productos
   error:
@@ -22,13 +22,12 @@ logging:
   level:
     root: INFO
     org.springframework.web: ERROR
-    com.miapp.paquete: DEBUG
   pattern:
     console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
 
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_SERVER}

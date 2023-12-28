@@ -51,9 +51,7 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioServices.validarTelefono(request));
     }
 
-    @PostMapping(
-            value = {"/validarTelefono/validarCodigo", "/validarEmail/validarCodigo"}
-    )
+    @PostMapping(value = {"/validarTelefono/validarCodigo", "/validarEmail/validarCodigo"})
     public ResponseEntity<Mono<ValidarCodigoDTO.Response>> validarCodigo(
             @RequestBody ValidarCodigoDTO.Request request
     ) {
