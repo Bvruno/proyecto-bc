@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 @Data
 public class CompraDto {
 
-    public static Responce convertToResponce(Compra compra) {
+    public static Response convertToResponce(Compra compra) {
         List<CompraDto.ProductoDto> listaProductos = compra.getListaProductos().stream()
                 .map(producto -> CompraDto.ProductoDto.builder()
                         .nombre(producto.getId())
@@ -19,7 +19,7 @@ public class CompraDto {
                         .build())
                 .collect(Collectors.toList());
 
-        return Responce.builder()
+        return Response.builder()
                 .idUsuario(compra.getIdUsuario())
                 .listaProductos(listaProductos)
                 .montoTotal(compra.getMontoTotal())
@@ -55,7 +55,7 @@ public class CompraDto {
 
     @Data
     @Builder
-    public static class Responce {
+    public static class Response {
         private String idUsuario;
         private List<CompraDto.ProductoDto> listaProductos;
         private double montoTotal;

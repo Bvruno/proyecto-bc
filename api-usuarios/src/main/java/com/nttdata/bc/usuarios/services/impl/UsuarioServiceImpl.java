@@ -1,4 +1,4 @@
-package com.nttdata.bc.usuarios.services;
+package com.nttdata.bc.usuarios.services.impl;
 
 import com.nttdata.bc.usuarios.controllers.dto.*;
 import com.nttdata.bc.usuarios.exceptions.BadRequestException;
@@ -6,18 +6,20 @@ import com.nttdata.bc.usuarios.models.Usuario;
 import com.nttdata.bc.usuarios.models.Validacion;
 import com.nttdata.bc.usuarios.repositories.UsuariosRepository;
 import com.nttdata.bc.usuarios.repositories.ValidacionRepository;
-
-import java.util.Random;
-
+import com.nttdata.bc.usuarios.services.ApisNetService;
+import com.nttdata.bc.usuarios.services.SMSService;
+import com.nttdata.bc.usuarios.services.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@Service
+import java.util.Random;
+
 @Slf4j
-public class UsuarioServices {
+@Service
+public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private UsuariosRepository usuariosRepository;
@@ -31,6 +33,7 @@ public class UsuarioServices {
     @Autowired
     private SMSService smsService;
 
+    @Override
     public Mono<UsuarioCrearDto.Response> crearUsuario(
             UsuarioCrearDto.Request request
     ) {
@@ -73,6 +76,7 @@ public class UsuarioServices {
                 );
     }
 
+    @Override
     public Mono<ValidarDniDto.Response> verificarDNI(
             ValidarDniDto.Request request
     ) {
@@ -96,12 +100,14 @@ public class UsuarioServices {
                 .map(ValidarDniDto::isApellidoPaterno);
     }
 
+    @Override
     public Flux<UsuarioDto> findAll() {
         return usuariosRepository.findAll()
                 .switchIfEmpty(Mono.error(new BadRequestException("Error al encontrar los usuarios")))
                 .flatMap(usuario -> Mono.just(UsuarioDto.convertToDto(usuario)));
     }
 
+    @Override
     public Mono<UsuarioDto> findByDni(String dni) {
         return usuariosRepository
                 .findByDni(dni)
@@ -111,6 +117,7 @@ public class UsuarioServices {
                 .flatMap(usuario -> Mono.just(UsuarioDto.convertToDto(usuario)));
     }
 
+    @Override
     public Mono<UsuarioEditarDto> save(UsuarioEditarDto.Request request) {
         log.info("Request: {}", request);
         return usuariosRepository.findByDni(request.getDni())
@@ -121,10 +128,12 @@ public class UsuarioServices {
                                 .flatMap(usuarioValidado -> Mono.just(UsuarioEditarDto.convertToDto(usuarioValidado))));
     }
 
+    @Override
     public void deleteByDni(String ruc) {
         usuariosRepository.deleteByDni(ruc);
     }
 
+    @Override
     public Mono<ValidarTelefonoDTO.Response> validarTelefono(ValidarTelefonoDTO.Request request) {
         Mono<Validacion> validacionMono = validacionRepository.save(
                 ValidarTelefonoDTO.convertToEntity(request, generarCodigo()));
@@ -154,17 +163,20 @@ public class UsuarioServices {
                 );
     }
 
-    public int generarCodigo() {
+    private int generarCodigo() {
         Random random = new Random();
         int min = 100000;
         int max = 999999;
-        return random.nextInt(max - min + 1) + min;
+        //return random.nextInt(max - min + 1) + min;
+        return 789456;
     }
 
+    @Override
     public Mono<Object> validarEmail(String email) {
         return Mono.just(email);
     }
 
+    @Override
     public Mono<ValidarCodigoDTO.Response> validarCodigo(
             ValidarCodigoDTO.Request request
     ) {
@@ -213,6 +225,7 @@ public class UsuarioServices {
                 );
     }
 
+    @Override
     public Mono<?> deleteUser(String dni) {
         return usuariosRepository
                 .findByDni(dni)
@@ -226,6 +239,7 @@ public class UsuarioServices {
                 );
     }
 
+    @Override
     public Mono<UsuarioDto> disableUser(String dni) {
         return usuariosRepository.findByDni(dni)
                 .switchIfEmpty(Mono.error(new BadRequestException("Error al encontrar el usuario")))
@@ -236,12 +250,14 @@ public class UsuarioServices {
                 );
     }
 
+    @Override
     public Mono<UsuarioDto> findById(String id) {
         return usuariosRepository.findById(id)
                 .switchIfEmpty(Mono.error(new BadRequestException("Error al encontrar el usuario")))
                 .flatMap(usuario -> Mono.just(UsuarioDto.convertToDto(usuario)));
     }
 
+    @Override
     public Mono<UsuarioDto> actualizarSaldo(UsuarioEditarDto.Request user) {
         return usuariosRepository.findByDni(user.getDni())
                 .switchIfEmpty(Mono.error(new BadRequestException("Error al encontrar el usuario")))

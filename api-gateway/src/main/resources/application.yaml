@@ -9,9 +9,6 @@ spring:
       ribbon:
         enabled: false
     gateway:
-      discovery:
-        locator:
-          enabled: true
       routes:
         - id: api-usuarios
           uri: lb://api-usuarios
@@ -33,7 +30,6 @@ spring:
           predicates:
             - Path=/api/localComercial/**
 
-
 eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
@@ -41,7 +37,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: ${EUREKA_SERVER}
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
 
 logging:
     level:

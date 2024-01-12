@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class ProductoDto {
 
-    public static ProductoDto.Responce convertToReturn(ProductoDto.Request request) {
-        return ProductoDto.Responce.builder()
+    public static Response convertToReturn(ProductoDto.Request request) {
+        return Response.builder()
                 .id(request.getId())
                 .nombre(request.getNombre())
                 .precio(request.getPrecio())
@@ -18,7 +18,7 @@ public class ProductoDto {
                 .build();
     }
 
-    public static ProductoDto.Request convertToRequest(ProductoDto.Responce val) {
+    public static ProductoDto.Request convertToRequest(Response val) {
         return ProductoDto.Request.builder()
                 .id(val.getId())
                 .nombre(val.getNombre())
@@ -29,8 +29,8 @@ public class ProductoDto {
                 .build();
     }
 
-    public static ProductoDto.Responce convertToResponce(Producto val) {
-        return ProductoDto.Responce.builder()
+    public static Response convertToResponce(Producto val) {
+        return Response.builder()
                 .id(val.getId())
                 .nombre(val.getNombre())
                 .precio(val.getPrecio())
@@ -64,7 +64,7 @@ public class ProductoDto {
 
     @Data
     @Builder
-    public static class Responce {
+    public static class Response {
         private String id;
         private String nombre;
         private double precio;

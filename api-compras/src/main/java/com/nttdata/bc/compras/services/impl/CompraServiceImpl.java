@@ -1,4 +1,4 @@
-package com.nttdata.bc.compras.services;
+package com.nttdata.bc.compras.services.impl;
 
 import com.nttdata.bc.compras.clients.ProductoApiClient;
 import com.nttdata.bc.compras.clients.UsuarioApiClient;
@@ -8,6 +8,7 @@ import com.nttdata.bc.compras.controllers.dto.CompraDto;
 import com.nttdata.bc.compras.exceptions.*;
 import com.nttdata.bc.compras.repositories.CompraRepository;
 
+import com.nttdata.bc.compras.services.CompraService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -17,27 +18,30 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class CompraServices {
+public class CompraServiceImpl implements CompraService {
 
     private final CompraRepository compraRepository;
     private final ProductoApiClient productoApiClient;
     private final UsuarioApiClient usuarioApiClient;
 
-    CompraServices(CompraRepository compraRepository, ProductoApiClient productoApiClient, UsuarioApiClient usuarioApiClient) {
+    CompraServiceImpl(CompraRepository compraRepository, ProductoApiClient productoApiClient, UsuarioApiClient usuarioApiClient) {
         this.compraRepository = compraRepository;
         this.productoApiClient = productoApiClient;
         this.usuarioApiClient = usuarioApiClient;
     }
 
-    public Flux<CompraDto.Responce> getAllCompra() {
+    @Override
+    public Flux<CompraDto.Response> getAllCompra() {
         return compraRepository.findAll().switchIfEmpty(Flux.empty()).map(CompraDto::convertToResponce);
     }
 
-    public Mono<CompraDto.Responce> getCompraById(String id) {
+    @Override
+    public Mono<CompraDto.Response> getCompraById(String id) {
         return compraRepository.findById(id).switchIfEmpty(Mono.error(new Exception("No se encontro la compra"))).map(CompraDto::convertToResponce);
     }
 
-    public Mono<CompraDto.Responce> createCompra(CompraDto.Request request) {
+    @Override
+    public Mono<CompraDto.Response> createCompra(CompraDto.Request request) {
         double montoTotal = calcularMontoTotal(request);
         request.setMontoTotal(montoTotal);
 
@@ -87,7 +91,8 @@ public class CompraServices {
                 .collectList();
     }
 
-    public Mono<CompraDto.Responce> updateCompra(String id, CompraDto.Request request) {
+    @Override
+    public Mono<CompraDto.Response> updateCompra(String id, CompraDto.Request request) {
         return compraRepository.findById(id).switchIfEmpty(Mono.error(new CompraException("No se encontro la compra"))).flatMap(compra -> {
             compra.setListaProductos(CompraDto.convertToEntity(request).getListaProductos());
             compra.setMontoTotal(request.getMontoTotal());
@@ -95,8 +100,10 @@ public class CompraServices {
         });
     }
 
+    @Override
     public Mono<Void> deleteCompra(String id) {
         return compraRepository.deleteById(id);
     }
+
 
 }

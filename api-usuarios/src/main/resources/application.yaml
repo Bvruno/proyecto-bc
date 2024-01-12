@@ -3,7 +3,7 @@ spring:
     name: api-usuarios
   data:
     mongodb:
-      uri: ${MONGO_URI}
+      uri: ${MONGO_URI:mongodb://localhost:27017/proyectoBC}
   devtools:
     restart:
       enabled: true
@@ -30,16 +30,16 @@ eureka:
     instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER}
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
 
 
 apis-net:
-  token: ${API_NET_TOKEN}
-  url: ${API_NET_URL}
+  token: ${API_NET_TOKEN:apis-token-6776.OLyGllM8ov0NcyjYCy4V84SKbxnL3Ix9}
+  url: ${API_NET_URL:https://api.apis.net.pe/v2/reniec/dni}
 
 twilio:
-  account_sid: ${TWILIO_ACCOUNT_SID}
-  auth_token: ${TWILIO_AUTH_TOKEN}
-  phone_number: ${TWILIO_PHONE_NUMBER}
+  account_sid: ${TWILIO_ACCOUNT_SID:ACc44ab6936281f296af497c0a360787dd}
+  auth_token: ${TWILIO_AUTH_TOKEN:b71e2235c478a173950458104e159110}
+  phone_number: ${TWILIO_PHONE_NUMBER:+14155238886}
   templates:
-    validar_cuenta: ${TWILIO_TEMPLATE_VALIDAR_CUENTA}
+    validar_cuenta: ${TWILIO_TEMPLATE_VALIDAR_CUENTA:HX319225d7f8d5f8a5d8ad796edbfad867}

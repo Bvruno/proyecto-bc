@@ -1,7 +1,7 @@
 package com.nttdata.bc.usuarios.controllers;
 
 import com.nttdata.bc.usuarios.controllers.dto.*;
-import com.nttdata.bc.usuarios.services.UsuarioServices;
+import com.nttdata.bc.usuarios.services.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,27 +12,27 @@ import reactor.core.publisher.Mono;
 @Slf4j
 public class UsuarioController {
 
-    private final UsuarioServices usuarioServices;
+    private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioServices usuarioServices) {
-        this.usuarioServices = usuarioServices;
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping(value = "/listarUsuarios")
     public ResponseEntity<Flux<UsuarioDto>> getAllUsers() {
-        return ResponseEntity.ok(usuarioServices.findAll());
+        return ResponseEntity.ok(usuarioService.findAll());
     }
 
     @GetMapping(value = "/dni/{dni}")
     public ResponseEntity<Mono<UsuarioDto>> getUserByDni(@PathVariable String dni) {
         log.info("getUserByDni Request: {}", dni);
-        return ResponseEntity.ok(usuarioServices.findByDni(dni));
+        return ResponseEntity.ok(usuarioService.findByDni(dni));
     }
 
     @GetMapping(value = "/{id}")
     public Mono<UsuarioDto> getUserById(@PathVariable String id) {
         log.info("getUserById Request: {}", id);
-        return usuarioServices.findById(id);
+        return usuarioService.findById(id);
     }
 
     @PostMapping(value = "/validarDNI")
@@ -40,7 +40,7 @@ public class UsuarioController {
             @RequestBody ValidarDniDto.Request request
     ) {
         log.info("verificarDNI Request: {}", request);
-        return ResponseEntity.ok(usuarioServices.verificarDNI(request));
+        return ResponseEntity.ok(usuarioService.verificarDNI(request));
     }
 
     @PostMapping(value = "/validarTelefono/crearCodigo")
@@ -48,7 +48,7 @@ public class UsuarioController {
             @RequestBody ValidarTelefonoDTO.Request request
     ) {
         log.info("validarTelefono Request: {}", request);
-        return ResponseEntity.ok(usuarioServices.validarTelefono(request));
+        return ResponseEntity.ok(usuarioService.validarTelefono(request));
     }
 
     @PostMapping(value = {"/validarTelefono/validarCodigo", "/validarEmail/validarCodigo"})
@@ -56,13 +56,13 @@ public class UsuarioController {
             @RequestBody ValidarCodigoDTO.Request request
     ) {
         log.info("validarCodigo Request: {}", request);
-        return ResponseEntity.ok(usuarioServices.validarCodigo(request));
+        return ResponseEntity.ok(usuarioService.validarCodigo(request));
     }
 
     @PostMapping(value = "/validarEmail/crearCodigo")
     public ResponseEntity<Mono<Object>> validarEmail(@PathVariable String email) {
         log.info("validarEmail Request: {}", email);
-        return ResponseEntity.ok(usuarioServices.validarEmail(email));
+        return ResponseEntity.ok(usuarioService.validarEmail(email));
     }
 
     @PostMapping(value = "/crearUsuario")
@@ -70,7 +70,7 @@ public class UsuarioController {
             @RequestBody UsuarioCrearDto.Request user
     ) {
         log.info("createUsuario Request: {}", user);
-        return ResponseEntity.ok(usuarioServices.crearUsuario(user));
+        return ResponseEntity.ok(usuarioService.crearUsuario(user));
     }
 
     @PutMapping("/editar")
@@ -78,7 +78,7 @@ public class UsuarioController {
             @RequestBody UsuarioEditarDto.Request user
     ) {
         log.info("updateUser Request: {}", user);
-        return ResponseEntity.ok(usuarioServices.save(user));
+        return ResponseEntity.ok(usuarioService.save(user));
     }
 
     @PutMapping("/editarSaldo")
@@ -86,18 +86,18 @@ public class UsuarioController {
             @RequestBody UsuarioEditarDto.Request user
     ) {
         log.info("updateSaldoUser Request: {}", user);
-        return ResponseEntity.ok(usuarioServices.actualizarSaldo(user));
+        return ResponseEntity.ok(usuarioService.actualizarSaldo(user));
     }
 
     @PatchMapping("/deshabilitar/{dni}")
     public ResponseEntity<Mono<UsuarioDto>> disableUser(@PathVariable String dni) {
         log.info("disableUser Request: {}", dni);
-        return ResponseEntity.ok(usuarioServices.disableUser(dni));
+        return ResponseEntity.ok(usuarioService.disableUser(dni));
     }
 
     @DeleteMapping("/eliminar/{dni}")
     public ResponseEntity<Mono<?>> deleteUser(@PathVariable String dni) {
         log.info("deleteUser Request: {}", dni);
-        return ResponseEntity.ok(usuarioServices.deleteUser(dni));
+        return ResponseEntity.ok(usuarioService.deleteUser(dni));
     }
 }

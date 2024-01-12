@@ -3,30 +3,26 @@ package com.nttdata.bc.localcomercial.webfux.service;
 import com.nttdata.bc.localcomercial.controllers.dto.LocalComercialDto;
 import com.nttdata.bc.localcomercial.models.LocalComercial;
 import com.nttdata.bc.localcomercial.repositories.LocalComercialRepository;
-import com.nttdata.bc.localcomercial.services.LocalComercialServices;
+import com.nttdata.bc.localcomercial.services.LocalComercialService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class LocalComercialServicesTest {
+public class LocalComercialServiceTest {
 
     @InjectMocks
-    LocalComercialServices localComercialServices;
+    LocalComercialService localComercialService;
 
     @Mock
     LocalComercialRepository localComercialRepository;
@@ -43,7 +39,7 @@ public class LocalComercialServicesTest {
 
         when(localComercialRepository.findAll()).thenReturn(mockResponse);
 
-        Flux<LocalComercialDto.Response> result = localComercialServices.getAllLocalComercial();
+        Flux<LocalComercialDto.Response> result = localComercialService.getAllLocalComercial();
 
         StepVerifier.create(result)
                 .expectNext(convertToLocalComercialDto(localComercial1))
@@ -66,7 +62,7 @@ public class LocalComercialServicesTest {
 
         when(localComercialRepository.findById(id)).thenReturn(Mono.just(localComercial));
 
-        Mono<LocalComercialDto.Response> resultMono = localComercialServices.getLocalComercialById(id);
+        Mono<LocalComercialDto.Response> resultMono = localComercialService.getLocalComercialById(id);
 
         LocalComercialDto.Response expectedResponse = LocalComercialDto.convertToResponse(localComercial);
         LocalComercialDto.Response actualResponse = resultMono.block();
@@ -84,7 +80,7 @@ public class LocalComercialServicesTest {
 
         when(localComercialRepository.save(any())).thenReturn(Mono.just(localComercial));
 
-        Mono<LocalComercialDto.Response> result = localComercialServices.createLocalComercial(request);
+        Mono<LocalComercialDto.Response> result = localComercialService.createLocalComercial(request);
 
         LocalComercialDto.Response expectedResponse = LocalComercialDto.convertToResponse(localComercial);
         assertEquals(expectedResponse, result.block());
@@ -104,7 +100,7 @@ public class LocalComercialServicesTest {
         when(localComercialRepository.findById(id)).thenReturn(Mono.just(localComercial));
         when(localComercialRepository.save(localComercial)).thenReturn(Mono.just(localComercial));
 
-        Mono<LocalComercialDto.Response> result = localComercialServices.updateLocalComercial(id, request);
+        Mono<LocalComercialDto.Response> result = localComercialService.updateLocalComercial(id, request);
 
         StepVerifier.create(result)
                 .expectNextMatches(response -> {
@@ -121,7 +117,7 @@ public class LocalComercialServicesTest {
 
         when(localComercialRepository.deleteById(id)).thenReturn(Mono.empty());
 
-        Mono<Void> result = localComercialServices.deleteLocalComercial(id);
+        Mono<Void> result = localComercialService.deleteLocalComercial(id);
 
         StepVerifier.create(result)
                 .verifyComplete();

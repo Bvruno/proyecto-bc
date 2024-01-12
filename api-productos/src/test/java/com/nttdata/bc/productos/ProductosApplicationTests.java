@@ -2,7 +2,7 @@ package com.nttdata.bc.productos;
 
 import com.nttdata.bc.productos.controllers.ProductoController;
 import com.nttdata.bc.productos.controllers.dto.ProductoDto;
-import com.nttdata.bc.productos.services.ProductoServices;
+import com.nttdata.bc.productos.services.ProductoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +24,7 @@ class ProductosApplicationTests {
 	private ProductoController productoController;
 
 	@Mock
-	private ProductoServices productoServices;
+	private ProductoService productoServices;
 
 	@BeforeEach
 	void setUp() {
@@ -33,9 +33,9 @@ class ProductosApplicationTests {
 
 	@Test
 	void findAll() {
-		ProductoDto.Responce entidad1 = ProductoDto.Responce.builder()
+		ProductoDto.Response entidad1 = ProductoDto.Response.builder()
 				.id("1").nombre("carne").descripcion("carne de res").precio(100.0).idTienda("1").build();
-		ProductoDto.Responce entidad2 = ProductoDto.Responce.builder()
+		ProductoDto.Response entidad2 = ProductoDto.Response.builder()
 				.id("2").nombre("leche").descripcion("leche deslactosada").precio(50.0).idTienda("1").build();
 		when(productoServices.getAllProductos()).thenReturn(Flux.just(entidad1, entidad2));
 
@@ -43,14 +43,14 @@ class ProductosApplicationTests {
 				.uri("")
 				.exchange()
 				.expectStatus().isOk()
-				.expectBodyList(ProductoDto.Responce.class)
+				.expectBodyList(ProductoDto.Response.class)
 				.hasSize(2)
 				.contains(entidad1, entidad2);
 	}
 
 	@Test
 	void findById() {
-		ProductoDto.Responce entidad1 = ProductoDto.Responce.builder()
+		ProductoDto.Response entidad1 = ProductoDto.Response.builder()
 				.id("1").nombre("carne").descripcion("carne de res").precio(100.0).idTienda("1").build();
 		when(productoServices.getProductoById("1")).thenReturn(Mono.just(entidad1));
 
@@ -58,7 +58,7 @@ class ProductosApplicationTests {
 				.uri("/1")
 				.exchange()
 				.expectStatus().isOk()
-				.expectBodyList(ProductoDto.Responce.class)
+				.expectBodyList(ProductoDto.Response.class)
 				.hasSize(1)
 				.contains(entidad1);
 	}
@@ -67,34 +67,34 @@ class ProductosApplicationTests {
 	void create() {
 		ProductoDto.Request entidad = ProductoDto.Request.builder()
 				.nombre("carne").descripcion("carne de res").precio(100.0).idTienda("1").build();
-		ProductoDto.Responce entidadResponce = ProductoDto.Responce.builder()
+		ProductoDto.Response entidadResponse = ProductoDto.Response.builder()
 				.id("1").nombre("carne").descripcion("carne de res").precio(100.0).idTienda("1").build();
-		when(productoServices.createProducto(entidad)).thenReturn(Mono.just(entidadResponce));
+		when(productoServices.createProducto(entidad)).thenReturn(Mono.just(entidadResponse));
 
 		webTestClient.post()
 				.uri("/crear")
 				.body(Mono.just(entidad), ProductoDto.Request.class)
 				.exchange()
 				.expectStatus().isOk()
-				.expectBody(ProductoDto.Responce.class)
-				.isEqualTo(entidadResponce);
+				.expectBody(ProductoDto.Response.class)
+				.isEqualTo(entidadResponse);
 	}
 
 	@Test
 	void update() {
 		ProductoDto.Request entidad = ProductoDto.Request.builder()
 				.nombre("carne").descripcion("carne de res").precio(100.0).idTienda("1").build();
-		ProductoDto.Responce entidadResponce = ProductoDto.Responce.builder()
+		ProductoDto.Response entidadResponse = ProductoDto.Response.builder()
 				.id("1").nombre("carne").descripcion("carne de res").precio(100.0).idTienda("1").build();
-		when(productoServices.updateProducto("1", entidad)).thenReturn(Mono.just(entidadResponce));
+		when(productoServices.updateProducto("1", entidad)).thenReturn(Mono.just(entidadResponse));
 
 		webTestClient.put()
 				.uri("/editar/1")
 				.body(Mono.just(entidad), ProductoDto.Request.class)
 				.exchange()
 				.expectStatus().isOk()
-				.expectBody(ProductoDto.Responce.class)
-				.isEqualTo(entidadResponce);
+				.expectBody(ProductoDto.Response.class)
+				.isEqualTo(entidadResponse);
 	}
 
 	@Test

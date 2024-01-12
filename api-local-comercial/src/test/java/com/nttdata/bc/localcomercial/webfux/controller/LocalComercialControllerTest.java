@@ -2,7 +2,7 @@ package com.nttdata.bc.localcomercial.webfux.controller;
 
 import com.nttdata.bc.localcomercial.controllers.LocalComercialController;
 import com.nttdata.bc.localcomercial.controllers.dto.LocalComercialDto;
-import com.nttdata.bc.localcomercial.services.LocalComercialServices;
+import com.nttdata.bc.localcomercial.services.LocalComercialService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,13 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -31,7 +28,7 @@ public class LocalComercialControllerTest {
     LocalComercialController localComercialController;
 
     @Mock
-    private LocalComercialServices localComercialServices;
+    private LocalComercialService localComercialService;
 
     @BeforeEach
     void setUp() {
@@ -51,7 +48,7 @@ public class LocalComercialControllerTest {
 
         Flux<LocalComercialDto.Response> mockResponse = Flux.just(localComercial1, localComercial2);
 
-        when(localComercialServices.getAllLocalComercial()).thenReturn(mockResponse);
+        when(localComercialService.getAllLocalComercial()).thenReturn(mockResponse);
 
         webTestClient.get()
                 .uri("")
@@ -66,7 +63,7 @@ public class LocalComercialControllerTest {
     void testGetAllLocalComercialError() {
         Flux<LocalComercialDto.Response> mockResponse = Flux.just(null, null);
 
-        when(localComercialServices.getAllLocalComercial()).thenReturn(mockResponse);
+        when(localComercialService.getAllLocalComercial()).thenReturn(mockResponse);
 
         webTestClient.get().uri("")
                 .exchange()
@@ -82,7 +79,7 @@ public class LocalComercialControllerTest {
                 .direccion("Dirección de la tienda 1").horario("Horario de la tienda 1").idUsuario("1")
                 .build();
 
-        when(localComercialServices.getLocalComercialById(id)).thenReturn(Mono.just(mockResponse));
+        when(localComercialService.getLocalComercialById(id)).thenReturn(Mono.just(mockResponse));
 
         webTestClient.get()
                 .uri("/{id}", id)
@@ -97,7 +94,7 @@ public class LocalComercialControllerTest {
         String id = "non_existent_id";
         String errorMessage = "No se encontro el local comercial";
 
-        when(localComercialServices.getLocalComercialById(id)).thenReturn(Mono.error(new Exception(errorMessage)));
+        when(localComercialService.getLocalComercialById(id)).thenReturn(Mono.error(new Exception(errorMessage)));
 
         webTestClient.get()
                 .uri("/{id}", id)
@@ -117,7 +114,7 @@ public class LocalComercialControllerTest {
                 .direccion("Dirección de la tienda 1").horario("Horario de la tienda 1").idUsuario("1")
                 .build();
 
-        when(localComercialServices.createLocalComercial(request)).thenReturn(Mono.just(mockResponse));
+        when(localComercialService.createLocalComercial(request)).thenReturn(Mono.just(mockResponse));
 
         webTestClient.post()
                 .uri("/crear")
@@ -141,7 +138,7 @@ public class LocalComercialControllerTest {
                 .direccion("Dirección de la tienda 1").horario("Horario de la tienda 1").idUsuario("1")
                 .build();
 
-        when(localComercialServices.updateLocalComercial(eq(id), any())).thenReturn(Mono.just(mockResponse));
+        when(localComercialService.updateLocalComercial(eq(id), any())).thenReturn(Mono.just(mockResponse));
 
         webTestClient.put()
                 .uri("/editar/{id}", id)
@@ -155,7 +152,7 @@ public class LocalComercialControllerTest {
     public void testDeleteLocalComercial() {
         String id = "1";
 
-        when(localComercialServices.deleteLocalComercial(id)).thenReturn(Mono.empty());
+        when(localComercialService.deleteLocalComercial(id)).thenReturn(Mono.empty());
 
         Mono<Void> result = localComercialController.deleteLocalComercial(id);
 
