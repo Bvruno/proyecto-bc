@@ -3,40 +3,43 @@ spring:
     name: api-usuarios
   data:
     mongodb:
-      uri: mongodb://localhost:27017/proyectoBC
+      uri: ${MONGO_URI:mongodb://localhost:27017/proyectoBC}
   devtools:
     restart:
       enabled: true
-  #cloud:
-    #discovery:
-      #enabled: true
-    #loadbalancer:
-      #ribbon:
-        #enabled: false
 
 server:
-  port: ${PORT:0}
+  port: ${PORT:8084}
   servlet:
     context-path: /api/usuarios
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+    include-exception: false
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: ERROR
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
 
 eureka:
   instance:
-    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}
 
 
 apis-net:
-  token: apis-token-6776.OLyGllM8ov0NcyjYCy4V84SKbxnL3Ix9
-  base: https://api.apis.net.pe/v2
-  url:
-    dni: ${apis-net.base}/reniec/dni #?numero=
-    ruc: ${apis-net.base}/sunat/ruc #?numero=
-    tipocambio: ${apis-net.base}/tipo-cambio-sunat
+  token: ${API_NET_TOKEN:apis-token-6776.OLyGllM8ov0NcyjYCy4V84SKbxnL3Ix9}
+  url: ${API_NET_URL:https://api.apis.net.pe/v2/reniec/dni}
 
 twilio:
-  account_sid: ACc44ab6936281f296af497c0a360787dd
-  auth_token: 47b408a9e258a88c2b7a88611e478230
+  account_sid: ${TWILIO_ACCOUNT_SID:ACc44ab6936281f296af497c0a360787dd}
+  auth_token: ${TWILIO_AUTH_TOKEN:b71e2235c478a173950458104e159110}
+  phone_number: ${TWILIO_PHONE_NUMBER:+14155238886}
   templates:
-    validar_cuenta: HX319225d7f8d5f8a5d8ad796edbfad867
+    validar_cuenta: ${TWILIO_TEMPLATE_VALIDAR_CUENTA:HX319225d7f8d5f8a5d8ad796edbfad867}

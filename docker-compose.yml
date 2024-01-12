@@ -1,0 +1,135 @@
+version: '3'
+services:
+  eureka-server:
+    build:
+      context: ./microservicio-eureka
+      dockerfile: Dockerfile
+    image: microservicio-eureka-server
+    container_name: microservicio-eureka-server
+    expose:
+      - "8761"
+    ports:
+      - "8761:8761"
+    networks:
+      - spring-cloud-network
+
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    image: api-gateway
+    container_name: api-gateway
+    expose:
+      - "8090"
+    ports:
+      - "8090:8090"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka
+      - MONGO_URI=mongodb://mongo:27017/proyectoBC
+    depends_on:
+      - eureka-server
+      - api-compras
+      - api-usuarios
+      - api-productos
+      - api-local-comercial
+    networks:
+      - spring-cloud-network
+
+  api-compras:
+    build:
+      context: ./api-compras
+      dockerfile: Dockerfile
+    image: api-compras
+    container_name: api-compras
+    expose:
+      - "8081"
+    ports:
+      - "8081:8081"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka
+      - MONGO_URI=mongodb://mongo:27017/proyectoBC
+    depends_on:
+      - eureka-server
+      - mongo
+    networks:
+      - spring-cloud-network
+
+
+  api-local-comercial:
+    build:
+      context: ./api-local-comercial
+      dockerfile: Dockerfile
+    image: api-local-comercial
+    container_name: api-local-comercial
+    expose:
+      - "8082"
+    ports:
+      - "8082:8082"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka
+      - MONGO_URI=mongodb://mongo:27017/proyectoBC
+    depends_on:
+      - eureka-server
+      - mongo
+    networks:
+      - spring-cloud-network
+
+  api-productos:
+    build:
+      context: ./api-productos
+      dockerfile: Dockerfile
+    image: api-productos
+    container_name: api-productos
+    expose:
+      - "8083"
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka
+      - MONGO_URI=mongodb://mongo:27017/proyectoBC
+    depends_on:
+      - eureka-server
+      - mongo
+    networks:
+      - spring-cloud-network
+
+  api-usuarios:
+    build:
+      context: ./api-usuarios
+      dockerfile: Dockerfile
+    image: api-usuarios
+    container_name: api-usuarios
+    expose:
+      - "8084"
+    ports:
+      - "8084:8084"
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka
+      - API_NET_TOKEN=apis-token-6776.OLyGllM8ov0NcyjYCy4V84SKbxnL3Ix9
+      - API_NET_URL=https://api.apis.net.pe/v2/reniec/dni
+      - TWILIO_ACCOUNT_SID=MG395eb5a0f09dc3f898780b94118aa88f
+      - TWILIO_AUTH_TOKEN=b71e2235c478a173950458104e159110
+      - TWILIO_TEMPLATE_VALIDAR_CUENTA=HX319225d7f8d5f8a5d8ad796edbfad867
+      - TWILIO_PHONE_NUMBER=+14155238886
+      - MONGO_URI=mongodb://mongo:27017/proyectoBC
+    depends_on:
+      - eureka-server
+      - mongo
+    networks:
+      - spring-cloud-network
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data/db:/data/db
+    networks:
+      - spring-cloud-network
+
+networks:
+  spring-cloud-network:
+    driver: bridge

@@ -7,10 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 class ApiUsuariosApplicationTests {
 
 	@Test
-	void contextLoads() {
-	}
-
-	@Test
 	void test() {
 
 	}

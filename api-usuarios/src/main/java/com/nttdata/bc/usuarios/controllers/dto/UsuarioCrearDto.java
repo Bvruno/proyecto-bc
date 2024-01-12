@@ -1,13 +1,22 @@
 package com.nttdata.bc.usuarios.controllers.dto;
 
 import com.nttdata.bc.usuarios.models.Usuario;
+import com.nttdata.bc.usuarios.models.enums.Rol;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Data
 public class UsuarioCrearDto {
 
-    public static Usuario convertToEntity(UsuarioCrearDto.Request usuarioCrearDTO) {
+    public static String encrypPassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        password = encoder.encode(password);
+        return password;
+    }
+
+    public static Usuario convertToEntity(Request usuarioCrearDTO) {
         return Usuario.builder()
                 .dni(usuarioCrearDTO.getDni())
                 .nombreCompleto(usuarioCrearDTO.getNombreCompleto())
@@ -25,24 +34,34 @@ public class UsuarioCrearDto {
                 .build();
     }
 
-    public static UsuarioCrearDto.Response convertToDto(Usuario usuario) {
-        return new UsuarioCrearDto.Response(
-                usuario.getNombreCompleto(),
-                usuario.getNombres(),
-                usuario.isEmailValidado(),
-                usuario.isTelefonoValidado(),
-                usuario.isActivo()
-        );
+
+    public static Usuario convertToUsuarioSave(Request usuarioDTO, Usuario usuario) {
+        return Usuario.builder()
+                .id(usuario.getId())
+                .dni(usuario.getDni())
+                .nombreCompleto(usuario.getNombreCompleto())
+                .nombres(usuario.getNombres())
+                .apellidoPaterno(usuario.getApellidoPaterno())
+                .apellidoMaterno(usuario.getApellidoMaterno())
+                .email(usuario.getEmail())
+                .emailValidado(usuario.isEmailValidado())
+
+                //call encrypPassword function
+                .password(encrypPassword(usuarioDTO.getPassword()))
+
+                .direccion(usuarioDTO.getDireccion())
+                .telefono(usuario.getTelefono())
+                .telefonoValidado(usuario.isTelefonoValidado())
+                .rol(Rol.USUARIO.name())
+                .activo(true)
+                .build();
     }
 
     @Data
-    @AllArgsConstructor
+    @Builder
     public static class Response {
-        private String nombreCompleto;
-        private String nombres;
-        private boolean isEmailValidado;
-        private boolean isTelefonoValidado;
         private boolean isActivo;
+        private String mensaje;
     }
 
     @Data

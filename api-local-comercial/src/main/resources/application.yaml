@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: api-local-comercial
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/proyectoBC
+  devtools:
+    restart:
+      enabled: true
+
+server:
+  port: ${PORT:8082}
+  servlet:
+    context-path: /api/localComercial
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+    include-exception: false
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: ERROR
+    com.miapp.paquete: DEBUG
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER:http://localhost:8761/eureka}

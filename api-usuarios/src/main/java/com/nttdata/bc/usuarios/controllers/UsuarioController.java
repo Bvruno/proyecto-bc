@@ -1,77 +1,103 @@
 package com.nttdata.bc.usuarios.controllers;
 
-import com.nttdata.bc.usuarios.controllers.dto.UsuarioCrearDto;
-import com.nttdata.bc.usuarios.controllers.dto.UsuarioVerificarDniDto;
-import com.nttdata.bc.usuarios.models.Usuario;
-import com.nttdata.bc.usuarios.services.UsuarioServices;
-import com.twilio.exception.ApiException;
+import com.nttdata.bc.usuarios.controllers.dto.*;
+import com.nttdata.bc.usuarios.services.UsuarioService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-
 @RestController
 @Slf4j
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioServices usuarioServices;
+    private final UsuarioService usuarioService;
 
-    @GetMapping
-    public Flux<Usuario> getAllUsers() {
-        return usuarioServices.findAll();
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
-    @PostMapping
-    public Mono<ResponseEntity<UsuarioCrearDto.Response>> createUsuario(@RequestBody UsuarioCrearDto.Request user) {
-        return usuarioServices.crearUsuario(user)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    @GetMapping(value = "/listarUsuarios")
+    public ResponseEntity<Flux<UsuarioDto>> getAllUsers() {
+        return ResponseEntity.ok(usuarioService.findAll());
     }
 
-    @GetMapping(value = "/{dni}")
-    public Mono<Usuario> getUserByDni(@PathVariable String dni) {
-        return usuarioServices.findByDni(dni);
+    @GetMapping(value = "/dni/{dni}")
+    public ResponseEntity<Mono<UsuarioDto>> getUserByDni(@PathVariable String dni) {
+        log.info("getUserByDni Request: {}", dni);
+        return ResponseEntity.ok(usuarioService.findByDni(dni));
+    }
+
+    @GetMapping(value = "/{id}")
+    public Mono<UsuarioDto> getUserById(@PathVariable String id) {
+        log.info("getUserById Request: {}", id);
+        return usuarioService.findById(id);
     }
 
     @PostMapping(value = "/validarDNI")
-    public Mono<UsuarioVerificarDniDto.Response> verificarDNI(@RequestBody UsuarioVerificarDniDto.Request request) {
-        return usuarioServices.verificarDNI(request);
+    public ResponseEntity<Mono<ValidarDniDto.Response>> verificarDNI(
+            @RequestBody ValidarDniDto.Request request
+    ) {
+        log.info("verificarDNI Request: {}", request);
+        return ResponseEntity.ok(usuarioService.verificarDNI(request));
     }
 
-    @PostMapping(value = "/validarTelefono/{numeroTelefonico}")
-    public ResponseEntity<?> validarTelenofo(@PathVariable String numeroTelefonico) {
-        try {
-            return usuarioServices.validarTelefono(numeroTelefonico)
-                    .map(ResponseEntity::ok)
-                    .defaultIfEmpty(ResponseEntity.notFound().build()).block();
-        } catch (ApiException e) {
-            log.error(e.getMessage());
-            return ResponseEntity.badRequest().body("El numero ingresado debe tener el código del pais");
-        }
+    @PostMapping(value = "/validarTelefono/crearCodigo")
+    public ResponseEntity<Mono<ValidarTelefonoDTO.Response>> validarTelenofo(
+            @RequestBody ValidarTelefonoDTO.Request request
+    ) {
+        log.info("validarTelefono Request: {}", request);
+        return ResponseEntity.ok(usuarioService.validarTelefono(request));
     }
 
-    @PostMapping(value = "/validarEmail/{email}")
-    public ResponseEntity<?> validarEmail(@PathVariable String email) {
-        return usuarioServices.validarEmail(email)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build()).block();
+    @PostMapping(value = {"/validarTelefono/validarCodigo", "/validarEmail/validarCodigo"})
+    public ResponseEntity<Mono<ValidarCodigoDTO.Response>> validarCodigo(
+            @RequestBody ValidarCodigoDTO.Request request
+    ) {
+        log.info("validarCodigo Request: {}", request);
+        return ResponseEntity.ok(usuarioService.validarCodigo(request));
     }
 
-    @PutMapping("/{dni}")
-    public Mono<ResponseEntity<Usuario>> updateUser(@PathVariable String dni, @RequestBody Usuario user) {
-        user.setDni(dni);
-        return usuarioServices.save(user)
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    @PostMapping(value = "/validarEmail/crearCodigo")
+    public ResponseEntity<Mono<Object>> validarEmail(@PathVariable String email) {
+        log.info("validarEmail Request: {}", email);
+        return ResponseEntity.ok(usuarioService.validarEmail(email));
     }
 
-    @DeleteMapping("/{dni}")
-    public ResponseEntity<?> deleteUser(@PathVariable String dni) {
-        return ResponseEntity.ok(usuarioServices.findByDni(dni));
+    @PostMapping(value = "/crearUsuario")
+    public ResponseEntity<Mono<UsuarioCrearDto.Response>> createUsuario(
+            @RequestBody UsuarioCrearDto.Request user
+    ) {
+        log.info("createUsuario Request: {}", user);
+        return ResponseEntity.ok(usuarioService.crearUsuario(user));
     }
 
+    @PutMapping("/editar")
+    public ResponseEntity<Mono<UsuarioEditarDto>> updateUser(
+            @RequestBody UsuarioEditarDto.Request user
+    ) {
+        log.info("updateUser Request: {}", user);
+        return ResponseEntity.ok(usuarioService.save(user));
+    }
+
+    @PutMapping("/editarSaldo")
+    public ResponseEntity<Mono<UsuarioDto>> updateSaldoUser(
+            @RequestBody UsuarioEditarDto.Request user
+    ) {
+        log.info("updateSaldoUser Request: {}", user);
+        return ResponseEntity.ok(usuarioService.actualizarSaldo(user));
+    }
+
+    @PatchMapping("/deshabilitar/{dni}")
+    public ResponseEntity<Mono<UsuarioDto>> disableUser(@PathVariable String dni) {
+        log.info("disableUser Request: {}", dni);
+        return ResponseEntity.ok(usuarioService.disableUser(dni));
+    }
+
+    @DeleteMapping("/eliminar/{dni}")
+    public ResponseEntity<Mono<?>> deleteUser(@PathVariable String dni) {
+        log.info("deleteUser Request: {}", dni);
+        return ResponseEntity.ok(usuarioService.deleteUser(dni));
+    }
 }
